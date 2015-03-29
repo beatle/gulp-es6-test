@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "gulp default"
+    "build": "gulp default",
+    "watch": "gulp watch"
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +20,8 @@
     "typescript": "^1.4.1"
   },
   "devDependencies": {
+    "gulp": "latest",
+    "gulp-babel": "^4.0.0",
     "gulp-babel": "^4.0.0",
     "gulp-concat": "^2.5.2",
     "gulp-html-js-template": "^0.1.5",

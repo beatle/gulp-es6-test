@@ -1,4 +1,4 @@
 import FlagsSvc from "services/flags-service";
-var svc = new FlagsSvc();
+var svc = new FlagsSvc.FlagsService();
 
-console.log("Hello");
+console.log("Hello", svc);
