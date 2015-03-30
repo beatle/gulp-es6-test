@@ -19,6 +19,7 @@
     "almond": "~0.3.1",
     "requirejs": "~2.1.16",
     "system.js": "~0.16.4",
-    "fetch": "~0.7.0"
+    "fetch": "~0.7.0",
+    "handlebars": "~3.0.0"
   }
 }

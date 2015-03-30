@@ -1,1 +1,7 @@
-<h1>Short profile widget</h1>
+<h1><%= title %></h1>
+<dl>
+    {{#each collection }}
+        <dt>{{ item.title  }}</dt>
+    {{/each}}
+</dl>
+
