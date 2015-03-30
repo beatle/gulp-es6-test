@@ -3,14 +3,12 @@ var babel = require('gulp-babel');
 var sourcemaps = require('gulp-sourcemaps');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
-var html2js = require('gulp-html-js-template');
 var template = require('gulp-template-compile');
-// @todo: try for gulp-requirejs-wrap-text
-// @link: https://www.npmjs.com/package/gulp-requirejs-wrap-text
 
 var paths = {
     scripts: ['app/**/*.js'],
-    tpl: ['app/templates/**/*.html']
+    tpl: ['app/templates/**/*.html'],
+    errorLog: 'error.log'
 };
 
 gulp.task('build:tpl', function () {
