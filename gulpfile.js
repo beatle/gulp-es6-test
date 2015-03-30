@@ -1,10 +1,10 @@
+var fs = require("fs");
 var gulp = require('gulp');
 var babel = require('gulp-babel');
 var usemin = require('gulp-usemin');
 var minifyHtml = require('gulp-minify-html');
 var sourcemaps = require('gulp-sourcemaps');
 var concat = require('gulp-concat');
-var uglify = require('gulp-uglify');
 var template = require('gulp-template-compile');
 var handlebars = require('gulp-handlebars');
 // var declare = require('gulp-declare');
@@ -17,66 +17,12 @@ var amdWrap = require('gulp-wrap-amd');
 
 var paths = {
     scripts: ['app/**/*.js'],
-    tpl: ['app/templates/**/*.html'],
+    tpl: ['app/**/*.handlebars'],
     errorLog: 'error.log',
     dest: 'dist',
-    tplDest: 'dist/tpl'
+    tplDest: 'dist/templates'
 };
 
-var requireConfig = {
-  baseUrl: './' //,
-  // paths: {
-      // "handlebars": "bower_components/handlebars/handlebars.runtime.amd"
-  // },
-};
-var options = {
-  // umd: false
-};
-var browserify = require('gulp-browserify');
-var browserifyHandlebars = require('browserify-handlebars');
-
-// gulp.task('scripts', function() {
-//     // Single entry point to browserify
-//     gulp.src('src/js/app.js')
-//     .pipe(browserify({
-//         transform: [browserifyHandlebars]
-//     }))
-//     .pipe(gulp.dest(paths.dest))
-// });
-
-// gulp.task('templates:optimize', ['templates'], function() {
-//     return gulp.src('src#<{(|.js', {base: requireConfig.baseUrl})
-//     ;
-// });
-
-
-gulp.task('templates', function() {
-  // Load templates from the templates/ folder relative to where gulp was executed
-  gulp.src(paths.tpl)
-    // .pipe(jst({
-    //     amd : true,
-    //     prettify : true,
-    //     namespace : true
-    // }))
-    // Compile each Handlebars template source file to a template function
-    // .pipe(handlebars())
-    // Define templates as AMD modules
-    //
-    .pipe(usemin({
-        html: [minifyHtml({empty: true})]
-    }))
-    // .pipe(wrap('\'<%= contents %>\''))
-    // .pipe(amdWrap({
-    //     // deps: ['handlebars'],          // dependency array
-    //     // params: ['handlebars'],        // params for callback
-    //     // exports: 'handlebars',         // variable to return
-    //     moduleRoot: './' // include a module name in the define() call, relative to moduleRoot
-    // }))
-    // .pipe(amdOptimize(requireConfig, options))
-    // Write the output into the templates folder
-    .pipe(concat('templates.js'))
-    .pipe(gulp.dest(paths.dest));
-});
 // gulp.task('templates', function() {
 //   // Load templates from the templates/ folder relative to where gulp was executed
 //   gulp.src(paths.tpl)
@@ -86,14 +32,59 @@ gulp.task('templates', function() {
 //     //     namespace : true
 //     // }))
 //     // Compile each Handlebars template source file to a template function
-//     .pipe(handlebars())
+//     // .pipe(handlebars())
 //     // Define templates as AMD modules
-//     .pipe(defineModule('amd'))
+//     //
+//     .pipe(usemin({
+//         html: [minifyHtml({empty: true})]
+//     }))
+//     // .pipe(wrap('\'<%= contents %>\''))
+//     // .pipe(amdWrap({
+//     //     // deps: ['handlebars'],          // dependency array
+//     //     // params: ['handlebars'],        // params for callback
+//     //     // exports: 'handlebars',         // variable to return
+//     //     moduleRoot: './' // include a module name in the define() call, relative to moduleRoot
+//     // }))
 //     // .pipe(amdOptimize(requireConfig, options))
 //     // Write the output into the templates folder
-//     // .pipe(concat('templates.js'))
+//     .pipe(concat('templates.js'))
 //     .pipe(gulp.dest(paths.dest));
 // });
+//
+var amdConfig = {
+    baseUrl: './dist',
+    moduleName: 'templates',
+    paths: {
+        'handlebars': '../bower_components/handlebars/handlebars.runtime',
+    },
+    exclude: ['handlebars'],
+    shims: {
+        handlebars: {
+            exports: 'handlebars',
+            init: function() {
+                this.Handlebars = Handlebars;
+                return this.Handlebars;
+            }
+        }
+    }
+};
+
+gulp.task('templates', function() {
+  // Load templates from the templates/ folder relative to where gulp was executed
+  gulp.src(paths.tpl)
+    // Compile each Handlebars template source file to a template function
+    .pipe(handlebars())
+    // Define templates as AMD modules
+    .pipe(defineModule('amd', {
+        context: {
+            handlebars: 'Handlebars.default.template(<%= contents %>)'
+        }
+    }))
+    .pipe(amdOptimize(amdConfig, {umd: false}))
+    // Write the output into the templates folder
+    .pipe(concat('templates.js'))
+    .pipe(gulp.dest(paths.dest));
+});
 //
 // gulp.task('templates', function(){
 //   gulp.src(paths.tpl)

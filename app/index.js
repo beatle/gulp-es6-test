@@ -1,13 +1,13 @@
-/* global JST  */
+// * global JST  */
 
 import FlagsSvc from "services/flags";
-// import profileTpl from "app/templates/profile";
+import profileTpl from "templates/profile";
 
 let svc = new FlagsSvc();
 
 // JST is a compiled views container
 // @todo: investigate how to use harmony import for text/html.
-let profileTpl = JST['profile.html'];
+// let profileTpl = JST['profile.html'];
 // let profileTpl = this["MyApp"]["templates"]["profile"],
 
 let run = function(querySelector) {
